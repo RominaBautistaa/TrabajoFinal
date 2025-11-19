@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CoWorkU</title>
+    <link rel="icon" type="image/x-icon" href="~/img/fab.png">
+    <meta name="description" content="@(ViewData["Description"] as string ?? "Descubre proyectos estudiantiles creativos e innovadores")" />
+
+    <meta property="og:title" content="@(ViewData["Title"] as string ?? "CoWorkU") - CoWorkU" />
+    <meta property="og:description" content="@(ViewData["Description"] as string ?? "Explora una colección de proyectos creativos creados por estudiantes talentosos")" />
+    <meta property="og:type" content="website" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="nav" role="navigation" aria-label="Navegación principal">
+                <div class="nav__brand">
+                    <a href="/" class="nav__logo">
+                        <img src="~/img/logo.png" alt="CoWorkU Logo" class="logo" />
+                        <span>CoWorkU</span>
+                    </a>
+                </div>
+
+                <ul class="nav__list">
+                    <li class="nav__item">
+                        <a href="/" class="nav__link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "nav__link--active" : "")">Inicio</a>
+                    </li>
+                    <li class="nav__item">
+                        <a href="/Projects" class="nav__link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Projects" ? "nav__link--active" : "")">Proyectos</a>
+                    </li>
+                    @if (User?.Identity?.IsAuthenticated != true)
+                    {
+                        <li class="nav__item">
+                            <a href="/Home/About" class="nav__link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "About" ? "nav__link--active" : "")">Acerca</a>
+                        </li>
+                        <li class="nav__item">
+                            <a asp-controller="Home" asp-action="Contact" class="nav__link">Contacto</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav__item">
+                            <a href="/MyProjects" class="nav__link @(ViewContext.RouteData.Values["controller"]?.ToString() == "MyProjects" ? "nav__link--active" : "")">Mis Proyectos</a>
+                        </li>
+                    }
+                </ul>
+                <div class="nav__actions">
+                    @if (User?.Identity?.IsAuthenticated == true)
+                    {
+                        <form method="post" action="/Account/Logout" style="display:inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn--primary">Salir</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a href="~/Account/Login" class="btn btn--ghost">Login</a>
+                        <a href="~/Account/Register" class="btn btn--primary">Registrarse</a>
+                    }
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        @RenderBody()
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__content">
+                <section class="footer__section">
+                    <h3 class="footer__title">Producto</h3>
+                    <ul class="footer__list">
+                        <li><a href="/Projects" class="footer__link">Explorar Proyectos</a></li>
+                        <li><a href="#" class="footer__link">Categorías</a></li>
+                        <li><a href="#" class="footer__link">Proyectos Destacados</a></li>
+                    </ul>
+                </section>
+
+                <section class="footer__section">
+                    <h3 class="footer__title">Recursos</h3>
+                    <ul class="footer__list">
+                        <li><a href="#" class="footer__link">Guías</a></li>
+                        <li><a href="#" class="footer__link">Documentación</a></li>
+                        <li><a href="#" class="footer__link">API</a></li>
+                    </ul>
+                </section>
+
+                <section class="footer__section">
+                    <h3 class="footer__title">Legal</h3>
+                    <ul class="footer__list">
+                        <li><a href="#" class="footer__link">Términos de Uso</a></li>
+                        <li><a href="#" class="footer__link">Política de Privacidad</a></li>
+                        <li><a href="#" class="footer__link">Cookies</a></li>
+                    </ul>
+                </section>
+
+                <section class="footer__section">
+                    <h3 class="footer__title">Redes</h3>
+                    <ul class="footer__list">
+                        <li><a href="#" class="footer__link">Twitter</a></li>
+                        <li><a href="#" class="footer__link">GitHub</a></li>
+                        <li><a href="#" class="footer__link">LinkedIn</a></li>
+                    </ul>
+                </section>
+            </div>
+
+            <div class="footer__bottom">
+                <p class="footer__copyright">
+                    <img src="~/img/logo.png" alt="CoWorkU Logo" class="logo logo--footer" />
+                    © 2025 CoWorkU. Todos los derechos reservados.
+                </p>
+                <p class="footer__contact">
+                    Contacto: <a href="mailto:contacto@CoWorkU.com" class="footer__email">contacto@CoWorkU.com</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

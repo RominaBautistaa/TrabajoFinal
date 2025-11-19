@@ -1,0 +1,261 @@
+@model TrabajoFinal.Models.JoinRequest
+@{
+    ViewData["Title"] = "Unirse al Proyecto";
+}
+
+<div class="page-header">
+    <h1 class="page-title">Unirse al Proyecto</h1>
+    <p class="page-subtitle">Completa el formulario para solicitar unirte a este proyecto</p>
+</div>
+
+<div class="projects-page">
+    <div class="container">
+        <div class="form-container">
+    <div id="error-message" class="alert alert-danger" style="display: none;">
+        <strong>Error:</strong> <span id="error-text"></span>
+    </div>
+    
+    <form id="joinRequestForm">
+        <input type="hidden" asp-for="ProjectId" />
+        
+        <div asp-validation-summary="ModelOnly" class="text-danger validation-summary"></div>
+        
+        <div class="form-group">
+            <label asp-for="Skills" class="form-label">Skills / Tecnologías que dominas</label>
+            <textarea asp-for="Skills" class="form-input" rows="3" placeholder="Ej: C#, JavaScript, HTML, CSS, Python..."></textarea>
+            <small class="form-help">Separa las tecnologías con comas</small>
+            <span asp-validation-for="Skills" class="text-danger form-validation-message"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="Message" class="form-label">Mensaje personal</label>
+            <textarea asp-for="Message" class="form-input" rows="4" placeholder="Cuéntanos por qué quieres unirte a este proyecto y qué aportarías..."></textarea>
+            <span asp-validation-for="Message" class="text-danger form-validation-message"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="Phone" class="form-label">Teléfono o WhatsApp</label>
+            <input asp-for="Phone" class="form-input" placeholder="+54 9 11 2345-6789" />
+            <span asp-validation-for="Phone" class="text-danger form-validation-message"></span>
+        </div>
+        
+        <div class="form-actions">
+            <a asp-controller="Projects" asp-action="Index" class="btn btn--ghost">Cancelar</a>
+            <button type="submit" id="submitBtn" class="btn btn--primary btn--green">
+                <span id="btnText">Enviar Solicitud</span>
+                <span id="spinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none;"></span>
+            </button>
+        </div>
+    </form>
+</div>
+    </div>
+</div>
+
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        padding: 2rem;
+        box-shadow: var(--shadow);
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--clr-text);
+        font-weight: 500;
+        font-size: var(--font-size-sm);
+    }
+    
+    .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background-color: var(--clr-bg);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius-sm);
+        color: var(--clr-text);
+        font-size: var(--font-size-base);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        box-sizing: border-box;
+    }
+    
+    .form-input:focus {
+        outline: none;
+        border-color: var(--clr-primary);
+        box-shadow: 0 0 0 2px rgba(0, 200, 81, 0.2);
+    }
+    
+    .form-input:invalid:not(:focus):not(:placeholder-shown) {
+        border-color: var(--clr-danger);
+    }
+    
+    textarea.form-input {
+        resize: vertical;
+        min-height: 120px;
+    }
+    
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--clr-border);
+    }
+    
+    .form-help {
+        display: block;
+        margin-top: 0.5rem;
+        color: var(--clr-muted);
+        font-size: var(--font-size-xs);
+    }
+    
+    .validation-summary {
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background-color: rgba(239, 68, 68, 0.1);
+        border: 1px solid var(--clr-danger);
+        border-radius: var(--radius-sm);
+        color: var(--clr-danger);
+        font-size: var(--font-size-sm);
+    }
+    
+    .form-validation-message {
+        display: block;
+        margin-top: 0.5rem;
+        font-size: var(--font-size-xs);
+        color: var(--clr-danger);
+    }
+    
+    .btn--green {
+        background-color: #00C851 !important;
+        border-color: #00C851 !important;
+        box-shadow: 0 0 10px rgba(0, 200, 81, 0.3) !important;
+    }
+    
+    .btn--green:hover {
+        background-color: #009639 !important;
+        border-color: #009639 !important;
+    }
+    
+    .spinner-border-sm {
+        width: 1rem;
+        height: 1rem;
+    }
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.getElementById('joinRequestForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validación de campos
+            const skills = document.getElementById('Skills').value.trim();
+            const message = document.getElementById('Message').value.trim();
+            const phone = document.getElementById('Phone').value.trim();
+            
+            if (!skills || !message || !phone) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Por favor completa todos los campos antes de enviar.',
+                    background: '#0e0e0e',
+                    color: 'white',
+                    confirmButtonColor: '#00C851'
+                });
+                return;
+            }
+            
+            // Mostrar spinner y deshabilitar botón
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('spinner');
+            
+            submitBtn.disabled = true;
+            btnText.textContent = 'Enviando...';
+            spinner.style.display = 'inline-block';
+            
+            try {
+                const formData = {
+                    ProjectId: document.getElementById('ProjectId').value,
+                    Skills: skills,
+                    Message: message,
+                    Phone: phone
+                };
+                
+                console.log('Enviando datos:', formData);
+                
+                // Obtener el token CSRF
+                const token = $('input[name="__RequestVerificationToken"]').val();
+                
+                console.log('Token CSRF:', token);
+                
+                const response = await fetch('/JoinRequests/Create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': token
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                console.log('Respuesta HTTP:', response.status);
+                
+                const result = await response.json();
+                console.log('Resultado JSON:', result);
+                
+                if (response.ok) {
+                    // Éxito
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Solicitud enviada correctamente',
+                        text: 'Tu solicitud fue enviada exitosamente.',
+                        background: '#0e0e0e',
+                        color: 'white',
+                        confirmButtonColor: '#00C851'
+                    }).then(() => {
+                        window.location.href = '/Home/Index'; // Redirigir al menú principal
+                    });
+                } else {
+                    // Error
+                    document.getElementById('error-text').textContent = result.message || 'Hubo un error al procesar tu solicitud';
+                    document.getElementById('error-message').style.display = 'block';
+                    
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: result.message || 'Hubo un error al procesar tu solicitud',
+                        background: '#0e0e0e',
+                        color: 'white',
+                        confirmButtonColor: '#00C851'
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un error de conexión. Por favor inténtalo de nuevo.',
+                    background: '#0e0e0e',
+                    color: 'white',
+                    confirmButtonColor: '#00C851'
+                });
+            } finally {
+                // Restaurar botón
+                submitBtn.disabled = false;
+                btnText.textContent = 'Enviar Solicitud';
+                spinner.style.display = 'none';
+            }
+        });
+    </script>
+}

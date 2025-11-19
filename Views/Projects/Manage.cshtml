@@ -1,0 +1,240 @@
+@model TrabajoFinal.Models.Project
+@{
+    ViewData["Title"] = "Gestionar Proyecto";
+}
+
+<div class="page-header">
+    <h1 class="page-title">Gestionar Proyecto</h1>
+    <p class="page-subtitle">Editar información de "@Model.Title"</p>
+</div>
+
+<div class="projects-page">
+    <div class="container">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        <form asp-action="Manage" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div asp-validation-summary="ModelOnly" class="text-danger validation-summary"></div>
+            
+            <div class="form-group">
+                <label asp-for="Title" class="form-label">Título del Proyecto</label>
+                <input asp-for="Title" class="form-input" placeholder="Nombre de tu proyecto" />
+                <span asp-validation-for="Title" class="text-danger form-validation-message"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Summary" class="form-label">Resumen Corto</label>
+                <input asp-for="Summary" class="form-input" placeholder="Descripción breve de tu proyecto" />
+                <span asp-validation-for="Summary" class="text-danger form-validation-message"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Description" class="form-label">Descripción Detallada</label>
+                <textarea asp-for="Description" class="form-input" rows="5" placeholder="Describe tu proyecto en detalle..."></textarea>
+                <span asp-validation-for="Description" class="text-danger form-validation-message"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Category" class="form-label">Categoría</label>
+                <select asp-for="Category" class="form-input">
+                    <option value="Educación">Educación</option>
+                    <option value="IA">IA (Inteligencia Artificial)</option>
+                    <option value="IoT">IoT (Internet de las Cosas)</option>
+                    <option value="Desarrollo Web">Desarrollo Web</option>
+                    <option value="Móvil">Aplicaciones Móviles</option>
+                    <option value="Juegos">Videojuegos</option>
+                    <option value="Hardware">Hardware</option>
+                    <option value="Data Science">Ciencia de Datos</option>
+                    <option value="Ciberseguridad">Ciberseguridad</option>
+                    <option value="Otro">Otro</option>
+                </select>
+                <span asp-validation-for="Category" class="text-danger form-validation-message"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Status" class="form-label">Estado</label>
+                <select asp-for="Status" class="form-input">
+                    <option value="Activo">Activo</option>
+                    <option value="En desarrollo">En desarrollo</option>
+                    <option value="Completado">Completado</option>
+                    <option value="En prueba">En prueba</option>
+                </select>
+                <span asp-validation-for="Status" class="text-danger form-validation-message"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Tags" class="form-label">Skills / Tecnologías</label>
+                <input asp-for="Tags" class="form-input" placeholder="Ej: C#, HTML, SQL, Python, React" />
+                <span asp-validation-for="Tags" class="text-danger form-validation-message"></span>
+                <small class="form-help">Separa las tecnologías con comas</small>
+            </div>
+            
+            <div class="form-actions">
+                <a asp-action="Index" asp-controller="MyProjects" class="btn btn--ghost">Cancelar</a>
+                <button type="submit" class="btn btn--primary">Guardar Cambios</button>
+                <button type="button" class="btn btn--danger" onclick="showDeleteConfirmation()">Eliminar Proyecto</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal de confirmación de eliminación -->
+<div id="deleteModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div class="modal-content" style="background-color: var(--clr-surface); border: 1px solid var(--clr-border); border-radius: var(--radius); padding: 1.5rem; width: 90%; max-width: 500px; box-shadow: var(--shadow);">
+        <div class="modal-header" style="margin-bottom: 1rem;">
+            <h5 class="modal-title">Confirmar eliminación</h5>
+        </div>
+        <div class="modal-body" style="margin-bottom: 1.5rem;">
+            ¿Estás seguro de que deseas eliminar el proyecto "@Model.Title"? Esta acción no se puede deshacer.
+        </div>
+        <div class="modal-footer" style="display: flex; gap: 1rem; justify-content: flex-end;">
+            <button type="button" class="btn btn--ghost" onclick="hideDeleteConfirmation()">Cancelar</button>
+            <form asp-controller="Projects" asp-action="Delete" asp-route-id="@Model.Id" method="post" style="display:inline;">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn--danger">Eliminar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        padding: 2rem;
+        box-shadow: var(--shadow);
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--clr-text);
+        font-weight: 500;
+        font-size: var(--font-size-sm);
+    }
+    
+    .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background-color: var(--clr-bg);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius-sm);
+        color: var(--clr-text);
+        font-size: var(--font-size-base);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        box-sizing: border-box;
+    }
+    
+    .form-input:focus {
+        outline: none;
+        border-color: var(--clr-primary);
+        box-shadow: 0 0 0 2px rgba(0, 200, 81, 0.2);
+    }
+    
+    .form-input:invalid:not(:focus):not(:placeholder-shown) {
+        border-color: var(--clr-danger);
+    }
+    
+    textarea.form-input {
+        resize: vertical;
+        min-height: 120px;
+    }
+    
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--clr-border);
+    }
+    
+    .form-help {
+        display: block;
+        margin-top: 0.5rem;
+        color: var(--clr-muted);
+        font-size: var(--font-size-xs);
+    }
+    
+    .validation-summary {
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background-color: rgba(239, 68, 68, 0.1);
+        border: 1px solid var(--clr-danger);
+        border-radius: var(--radius-sm);
+        color: var(--clr-danger);
+        font-size: var(--font-size-sm);
+    }
+    
+    .form-validation-message {
+        display: block;
+        margin-top: 0.5rem;
+        font-size: var(--font-size-xs);
+        color: var(--clr-danger);
+    }
+    
+    .btn--danger {
+        background-color: var(--clr-danger);
+        color: white;
+    }
+    
+    .btn--danger:hover {
+        background-color: #dc2626;
+        color: white;
+    }
+    
+    .modal-content {
+        background-color: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        color: var(--clr-text);
+    }
+    
+    .modal-header {
+        border-bottom: 1px solid var(--clr-border);
+    }
+    
+    .modal-footer {
+        border-top: 1px solid var(--clr-border);
+    }
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        function showDeleteConfirmation() {
+            var modal = document.getElementById('deleteModal');
+            if (modal) {
+                modal.style.display = 'flex';
+            }
+        }
+        
+        function hideDeleteConfirmation() {
+            var modal = document.getElementById('deleteModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // Cerrar el modal si se hace clic fuera de él
+        window.onclick = function(event) {
+            var modal = document.getElementById('deleteModal');
+            if (event.target === modal) {
+                hideDeleteConfirmation();
+            }
+        }
+    </script>
+}

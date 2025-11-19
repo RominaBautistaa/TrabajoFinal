@@ -1,0 +1,163 @@
+@model TrabajoFinal.Models.HomeViewModel
+@{
+    ViewData["Title"] = "Inicio";
+    ViewData["Description"] = "Descubre proyectos estudiantiles creativos e innovadores";
+}
+
+@if (!User.Identity.IsAuthenticated)
+{
+    <!-- TODO: Sección Hero - el estudiante puede personalizar estilos, gradientes y tipografías -->
+    <section class="hero hero--expanded" aria-labelledby="hero-title" style="background: url('/img/fondo.png') no-repeat center center fixed; background-size: cover; position: relative;">
+        <div class="hero-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.6)); z-index: 1;"></div>
+        <div class="container" style="position: relative; z-index: 2;">
+            <div class="hero__content">
+                <h1 class="hero__title hero__title--animated" id="hero-title">@Model.HeroTitle</h1>
+                <p class="hero__subtitle hero__subtitle--animated">@Model.HeroSubtitle</p>
+
+                <!-- TODO: Botones con estilos primary y ghost -->
+                <div class="hero__actions hero__actions--animated">
+                    <a href="/Projects" class="btn btn--primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M6 12.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>
+                            <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5M2 12s1.5 0 3-1 3 1 3 1zm5-4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-5 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+                        </svg>
+                        Explorar Proyectos
+                    </a>
+                    <a href="#como-funciona" class="btn btn--ghost">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                            <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.474.97-.864 1.317-.383.34-.635.96-.635 1.742v.018c0 .78.252 1.404.635 1.74.38.336.76.68.76 1.744 0 .63-.24.89-.635 1.07-.39.176-.89.31-1.314.31-.425 0-.92-.134-1.314-.31-.39-.176-.635-.44-.635-1.07v-.018c0-.78.252-1.404.635-1.74.38-.336.76-.68.76-1.744 0-.63-.24-.89-.635-1.07M9 10.5h.856c.84-.002.992 1.096.992 1.096C10.848 12.684 9.94 13 9 13c-.94 0-1.848-.316-1.848-1.408 0 0 .152-1.098.992-1.098z"/>
+                        </svg>
+                        Cómo Iniciar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nueva sección: ¿Te faltan equipos de proyectos? -->
+    <section class="projects-need" aria-labelledby="projects-need-title">
+        <div class="container">
+            <div class="projects-need__header">
+                <h2 class="projects-need__title" id="projects-need-title">¿Te faltan equipos de proyectos?</h2>
+                <p class="projects-need__subtitle">Colabora - Aprende - Crea</p>
+            </div>
+            
+            <p class="projects-need__intro">
+                Únete a una comunidad de estudiantes que comparten intereses en tecnología, diseño y desarrollo de software. 
+                Encuentra compañeros para formar equipos, colaborar en proyectos y crecer profesionalmente.
+            </p>
+
+            <div class="projects-need__cards">
+                <div class="projects-need__card">
+                    <div class="projects-need__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4.5L8 0l6 4.5"/>
+                            <path d="M7.293 14.5a1.98 1.98 0 0 1-.293.5 1 1 0 0 1-1 0 1.98 1.98 0 0 1-.293-.5 1.98 1.98 0 0 1-.293.5 1 1 0 0 1-1 0 1.98 1.98 0 0 1-.293-.5 1.98 1.98 0 0 1-.293.5 1 1 0 0 1-1 0 1.98 1.98 0 0 1-.293-.5 1.98 1.98 0 0 1-.293.5 1 1 0 0 1-1 0 1.98 1.98 0 0 1-.293-.5"/>
+                        </svg>
+                    </div>
+                    <h3 class="projects-need__card-title">Encuentra equipos colaborativos</h3>
+                    <p class="projects-need__card-text">Conecta con otros estudiantes y forma equipos multidisciplinarios para proyectos académicos y personales.</p>
+                </div>
+
+                <div class="projects-need__card">
+                    <div class="projects-need__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1M1.5 4a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1h-13z"/>
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.5 4.007v4.008a3.5 3.5 0 0 0 3 3.428 3.5 3.5 0 0 0 3-3.428V4.007H5.5Z"/>
+                        </svg>
+                    </div>
+                    <h3 class="projects-need__card-title">Aprende nuevas tecnologías</h3>
+                    <p class="projects-need__card-text">Trabaja en proyectos reales y adquiere experiencia práctica en las tecnologías más demandadas del mercado.</p>
+                </div>
+
+                <div class="projects-need__card">
+                    <div class="projects-need__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M14 3a 1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2z"/>
+                            <path d="M7.5 10.5v-3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5m1-5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
+                        </svg>
+                    </div>
+                    <h3 class="projects-need__card-title">Haz crecer tu portafolio</h3>
+                    <p class="projects-need__card-text">Muestra tu trabajo en proyectos colaborativos y construye un portafolio que destaque tus habilidades.</p>
+                </div>
+            </div>
+
+            <div class="projects-need__cta">
+                <a href="/Home/About" class="btn btn--primary">
+                    Conoce más de nosotros
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    @await Html.PartialAsync("_HowItWorks")
+}
+else
+{
+    <!-- Si el usuario está autenticado, mostrar la vista de bienvenida con el mismo fondo -->
+    <section class="authenticated-view" style="background: url('/img/fondo.png') no-repeat center center fixed; background-size: cover; position: relative; min-height: 80vh; display: flex; align-items: center;">
+        <div class="authenticated-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.6)); z-index: 1;"></div>
+        <div class="container" style="position: relative; z-index: 2;">
+            <div class="authenticated-content">
+                <h1 class="authenticated-title">¡Bienvenido de nuevo!</h1>
+                <p class="authenticated-subtitle">Explora los proyectos colaborativos</p>
+                <div class="authenticated-actions">
+                    <a href="/Projects" class="btn btn--primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M6 12.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/>
+                            <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-1a.5.5 0 0 1-.5-.5M2 12s1.5 0 3-1 3 1 3 1zm5-4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-5 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+                        </svg>
+                        Ver Proyectos
+                    </a>
+                    <a href="/MyProjects" class="btn btn--ghost">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4.5L8 0l6 4.5M7 4a1 1 0 0 0 0 2 1 1 0 0 0 0-2m0 4a1 1 0 1 1 0 2 1 1 0 0 1 0-2m0 4a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                        </svg>
+                        Mis Proyectos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+<!-- TODO: Sección de proyectos destacados -->
+<section class="featured-projects" aria-labelledby="featured-projects-title">
+    <div class="container">
+        @{
+            ViewData["Title"] = "Proyectos Destacados";
+            ViewData["Subtitle"] = "Los mejores proyectos seleccionados por nuestra comunidad";
+            ViewData["Id"] = "featured-projects-title";
+        }
+        @await Html.PartialAsync("_SectionTitle", ViewData)
+
+        @if (Model.FeaturedProjects?.Any() == true)
+        {
+            <!-- TODO: Grid responsive de 3 columnas en desktop, 2 en tablet, 1 en móvil -->
+            <div class="projects-grid" role="list" aria-label="Proyectos destacados">
+                @foreach (var project in Model.FeaturedProjects)
+                {
+                    <div role="listitem">
+                        @await Html.PartialAsync("_ProjectCard", project)
+                    </div>
+                }
+            </div>
+
+            <div class="featured-projects__actions">
+                <a href="/Projects" class="btn btn--primary">Ver Todos los Proyectos</a>
+            </div>
+        }
+        else
+        {
+            <!-- TODO: Estado vacío cuando no hay proyectos -->
+            <div class="empty-state">
+                <p class="empty-state__message">No hay proyectos destacados disponibles en este momento.</p>
+                <a href="/Projects" class="btn btn--primary">Explorar Proyectos</a>
+            </div>
+        }
+    </div>
+</section>

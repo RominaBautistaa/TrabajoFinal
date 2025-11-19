@@ -1,0 +1,138 @@
+@model IEnumerable<TrabajoFinal.Models.Project>
+@{
+    ViewData["Title"] = "Proyectos";
+    ViewData["Description"] = "Explora nuestra colección de proyectos estudiantiles";
+}
+
+<section class="projects-page">
+    <div class="container">
+        <!-- TODO: Header de la página -->
+        <header class="page-header">
+            <h1 class="page-title">Todos los Proyectos</h1>
+            <p class="page-subtitle">Descubre @ViewBag.ResultsCount proyectos increíbles creados por estudiantes</p>
+        </header>
+
+        <!-- TODO: Barra de filtros - solo visual, sin JavaScript -->
+        <div class="filters" role="search" aria-label="Filtros de búsqueda">
+            <form method="get" class="filters__form">
+                <!-- Búsqueda por texto -->
+                <div class="filters__group">
+                    <label for="search-input" class="filters__label">Buscar</label>
+                    <input
+                        type="text"
+                        id="search-input"
+                        name="q"
+                        value="@ViewBag.CurrentQuery"
+                        placeholder="Buscar proyectos..."
+                        class="filters__input"
+                        aria-describedby="search-help"
+                    />
+                    <small id="search-help" class="filters__help">Busca por título, descripción o tecnología</small>
+                </div>
+
+                <!-- Filtro por categoría -->
+                <div class="filters__group">
+                    <label for="category-select" class="filters__label">Categoría</label>
+                    <select name="category" id="category-select" class="filters__select">
+                        <option value="">Todas las categorías</option>
+                        @if (ViewBag.Categories != null)
+                        {
+                            @foreach (var category in (IEnumerable<string>)ViewBag.Categories)
+                            {
+                                @if (category == ViewBag.CurrentCategory)
+                                {
+                                    <option value="@category" selected="selected">@category</option>
+                                }
+                                else
+                                {
+                                    <option value="@category">@category</option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="filters__actions">
+                    <button type="submit" class="btn btn--primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                        </svg>
+                        Filtrar
+                    </button>
+                    <a href="/Projects" class="btn btn--ghost">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5"/>
+                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                        </svg>
+                        Limpiar
+                    </a>
+                </div>
+            </form>
+
+            <!-- TODO: Chips de tags - solo decorativos, cada uno es un link -->
+            <div class="filters__tags" role="list" aria-label="Filtrar por tecnología">
+                <span class="filters__tags-label">Tags populares:</span>
+                @if (ViewBag.Tags != null)
+                {
+                    @foreach (var tag in ((IEnumerable<string>)ViewBag.Tags).Take(8))
+                    {
+                        <a
+                            href="/Projects?tag=@tag"
+                            class="chip chip--filter @(tag == ViewBag.CurrentTag ? "chip--active" : "")"
+                            role="listitem"
+                            aria-label="Filtrar por @tag"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                            </svg>
+                            @tag
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+
+        <!-- TODO: Resultados -->
+        @if (ViewBag.HasResults)
+        {
+            <!-- Grid de proyectos -->
+            <div class="projects-grid" role="list" aria-label="Lista de proyectos">
+                @foreach (var project in Model)
+                {
+                    <div role="listitem">
+                        @await Html.PartialAsync("_ProjectCard", project)
+                    </div>
+                }
+            </div>
+
+            <!-- TODO: En el futuro se puede agregar paginación aquí -->
+            <div class="pagination-placeholder">
+                <p class="pagination-info">Mostrando @ViewBag.ResultsCount resultados</p>
+            </div>
+        }
+        else
+        {
+            <!-- TODO: Estado vacío cuando no hay resultados -->
+            <div class="empty-state">
+                <div class="empty-state__content">
+                    <h2 class="empty-state__title">No se encontraron proyectos</h2>
+                    <p class="empty-state__message">
+                        @if (!string.IsNullOrEmpty(ViewBag.CurrentQuery) || !string.IsNullOrEmpty(ViewBag.CurrentCategory) || !string.IsNullOrEmpty(ViewBag.CurrentTag))
+                        {
+                            <span>No hay proyectos que coincidan con tus filtros. Prueba con otros términos de búsqueda.</span>
+                        }
+                        else
+                        {
+                            <span>Aún no hay proyectos disponibles. ¡Vuelve pronto!</span>
+                        }
+                    </p>
+                    <div class="empty-state__actions">
+                        <a href="/Projects" class="btn btn--primary">Ver Todos</a>
+                        <a href="/" class="btn btn--ghost">Ir al Inicio</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>

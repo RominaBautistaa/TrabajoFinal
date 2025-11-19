@@ -1,0 +1,90 @@
+@model IEnumerable<TrabajoFinal.Models.JoinRequest>
+
+@{
+    ViewData["Title"] = "Solicitudes de Unión";
+}
+
+<div class="page-header">
+    <h1 class="page-title">Solicitudes de Unión</h1>
+    <p class="page-subtitle">Listado de todas las solicitudes enviadas</p>
+</div>
+
+<div class="projects-page">
+    <div class="container">
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Proyecto</th>
+                        <th>Skills</th>
+                        <th>Mensaje</th>
+                        <th>Teléfono</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var request in Model)
+                        {
+                            <tr>
+                                <td>@request.Id</td>
+                                <td>@request.UserId</td>
+                                <td>@request.ProjectId</td>
+                                <td>@request.Skills</td>
+                                <td>@request.Message</td>
+                                <td>@request.Phone</td>
+                                <td>@request.DateCreated.ToString("dd/MM/yyyy HH:mm")</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center">No hay solicitudes registradas</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table-container {
+        overflow-x: auto;
+    }
+    
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        overflow: hidden;
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--clr-border);
+    }
+    
+    .table th {
+        background-color: rgba(255, 255, 255, 0.05);
+        font-weight: 600;
+        color: var(--clr-text);
+    }
+    
+    .table tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .text-center {
+        text-align: center;
+        color: var(--clr-muted);
+    }
+</style>

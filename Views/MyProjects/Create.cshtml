@@ -1,0 +1,172 @@
+@model TrabajoFinal.Models.Project
+@{
+    ViewData["Title"] = "Subir Nuevo Proyecto";
+}
+
+<div class="page-header">
+    <h1 class="page-title">Subir Nuevo Proyecto</h1>
+    <p class="page-subtitle">Comparte tu trabajo con la comunidad</p>
+</div>
+
+<div class="projects-page">
+    <div class="container">
+        <div class="form-container">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger validation-summary"></div>
+                
+                <div class="form-group">
+                    <label asp-for="Title" class="form-label">Título del Proyecto</label>
+                    <input asp-for="Title" class="form-input" placeholder="Nombre de tu proyecto" />
+                    <span asp-validation-for="Title" class="text-danger form-validation-message"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="Summary" class="form-label">Resumen Corto</label>
+                    <input asp-for="Summary" class="form-input" placeholder="Descripción breve de tu proyecto" />
+                    <span asp-validation-for="Summary" class="text-danger form-validation-message"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="Description" class="form-label">Descripción Detallada</label>
+                    <textarea asp-for="Description" class="form-input" rows="5" placeholder="Describe tu proyecto en detalle..."></textarea>
+                    <span asp-validation-for="Description" class="text-danger form-validation-message"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="Category" class="form-label">Categoría</label>
+                    <select asp-for="Category" class="form-input">
+                        <option value="">Selecciona una categoría</option>
+                        <option value="Educación">Educación</option>
+                        <option value="IA">IA (Inteligencia Artificial)</option>
+                        <option value="IoT">IoT (Internet de las Cosas)</option>
+                        <option value="Desarrollo Web">Desarrollo Web</option>
+                        <option value="Móvil">Aplicaciones Móviles</option>
+                        <option value="Juegos">Videojuegos</option>
+                        <option value="Hardware">Hardware</option>
+                        <option value="Data Science">Ciencia de Datos</option>
+                        <option value="Ciberseguridad">Ciberseguridad</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                    <span asp-validation-for="Category" class="text-danger form-validation-message"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="Status" class="form-label">Estado</label>
+                    <select asp-for="Status" class="form-input">
+                        <option value="">Selecciona un estado</option>
+                        <option value="Activo">Activo</option>
+                        <option value="En desarrollo">En desarrollo</option>
+                        <option value="Completado">Completado</option>
+                        <option value="En prueba">En prueba</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger form-validation-message"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label asp-for="Tags" class="form-label">Skills / Tecnologías</label>
+                    <input asp-for="Tags" class="form-input" placeholder="Ej: C#, HTML, SQL, Python, React" />
+                    <span asp-validation-for="Tags" class="text-danger form-validation-message"></span>
+                    <small class="form-help">Separa las tecnologías con comas</small>
+                </div>
+                
+                <div class="form-actions">
+                    <a asp-action="Index" class="btn btn--ghost">Cancelar</a>
+                    <button type="submit" class="btn btn--primary">Guardar Proyecto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        padding: 2rem;
+        box-shadow: var(--shadow);
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--clr-text);
+        font-weight: 500;
+        font-size: var(--font-size-sm);
+    }
+    
+    .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background-color: var(--clr-bg);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius-sm);
+        color: var(--clr-text);
+        font-size: var(--font-size-base);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        box-sizing: border-box;
+    }
+    
+    .form-input:focus {
+        outline: none;
+        border-color: var(--clr-primary);
+        box-shadow: 0 0 0 2px rgba(0, 200, 81, 0.2);
+    }
+    
+    .form-input:invalid:not(:focus):not(:placeholder-shown) {
+        border-color: var(--clr-danger);
+    }
+    
+    textarea.form-input {
+        resize: vertical;
+        min-height: 120px;
+    }
+    
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--clr-border);
+    }
+    
+    .form-help {
+        display: block;
+        margin-top: 0.5rem;
+        color: var(--clr-muted);
+        font-size: var(--font-size-xs);
+    }
+    
+    .validation-summary {
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background-color: rgba(239, 68, 68, 0.1);
+        border: 1px solid var(--clr-danger);
+        border-radius: var(--radius-sm);
+        color: var(--clr-danger);
+        font-size: var(--font-size-sm);
+    }
+    
+    .form-validation-message {
+        display: block;
+        margin-top: 0.5rem;
+        font-size: var(--font-size-xs);
+        color: var(--clr-danger);
+    }
+    
+    .page-actions {
+        margin-bottom: 2rem;
+        text-align: right;
+    }
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,22 @@
+@{
+    var title = ViewData["Title"] as string ?? string.Empty;
+    var subtitle = ViewData["Subtitle"] as string ?? string.Empty;
+    var id = ViewData["Id"] as string ?? string.Empty; // opcional para aria-labelledby
+}
+
+<header class="section-title" aria-labelledby="@id">
+    @if (!string.IsNullOrWhiteSpace(title))
+    {
+        <h2 class="section-title__heading" id="@id">@title</h2>
+    }
+    @if (!string.IsNullOrWhiteSpace(subtitle))
+    {
+        <p class="section-title__subtitle">@subtitle</p>
+    }
+    @if (string.IsNullOrWhiteSpace(title) && string.IsNullOrWhiteSpace(subtitle))
+    {
+        <span class="sr-only">Sección</span>
+    }
+</header>
+
+ 

@@ -1,0 +1,110 @@
+@{
+    ViewData["Title"] = "Quiénes Somos";
+    ViewData["Description"] = "Conectamos estudiantes mediante proyectos colaborativos para impulsar la innovación";
+}
+
+<section class="about-page">
+    <div class="container">
+        <header class="about-header">
+            <h1 class="about-title" style="background: linear-gradient(90deg, #00e65b, #00BFFF); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-size: var(--font-size-4xl); font-weight: 700;">Quiénes Somos</h1>
+            <p class="about-subtitle" style="color: var(--clr-accent); font-size: var(--font-size-xl);">Conectamos estudiantes para crear, aprender y construir en equipo</p>
+        </header>
+
+        <div class="about-intro">
+            <p style="font-size: var(--font-size-lg); color: var(--clr-muted); line-height: 1.8; text-align: center; max-width: 800px; margin: 0 auto; background: linear-gradient(135deg, rgba(30, 41, 59, 0.5), rgba(15, 23, 42, 0.5)); padding: var(--gap); border-radius: var(--radius); border: 1px solid var(--clr-border);">
+                En CoWorkU creemos en el poder del trabajo colaborativo y el aprendizaje práctico. 
+                Somos una plataforma académica que conecta estudiantes universitarios para que descubran, 
+                publiquen y colaboren en proyectos de clase e innovación, fomentando el crecimiento profesional 
+                y la construcción de comunidades alrededor de ideas creativas.
+            </p>
+        </div>
+
+        <div class="about-mission-vision" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--gap); margin-bottom: var(--gap-lg);">
+            <div class="about-card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(34, 211, 238, 0.1)); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius); padding: var(--gap-lg); transition: all 0.3s ease;">
+                <h2 class="about-card__title" style="font-size: var(--font-size-xl); margin-bottom: 1.5rem; color: #00e65b; text-align: center; font-weight: 600;">Nuestra Misi&oacute;n</h2>
+                <div class="about-card__content">
+                    <p style="color: var(--clr-muted); line-height: 1.7;">
+                        Promover el trabajo en equipo, potenciar el aprendizaje práctico y construir comunidad 
+                        alrededor de ideas creativas, facilitando la colaboración entre estudiantes universitarios 
+                        para el desarrollo de proyectos innovadores.
+                    </p>
+                </div>
+            </div>
+
+            <div class="about-card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(34, 211, 238, 0.1)); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius); padding: var(--gap-lg); transition: all 0.3s ease;">
+                <h2 class="about-card__title" style="font-size: var(--font-size-xl); margin-bottom: 1.5rem; color: #00e65b; text-align: center; font-weight: 600;">Nuestra Visi&oacute;n</h2>
+                <div class="about-card__content">
+                    <p style="color: var(--clr-muted); line-height: 1.7;">
+                        Ser la plataforma líder en la conexión de estudiantes universitarios para la colaboración 
+                        en proyectos académicos e innovadores, impulsando la creación de soluciones tecnológicas 
+                        que aporten valor a la sociedad y fortalezcan el ecosistema de aprendizaje colaborativo.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="about-objectives">
+            <h2 class="about-section__title" style="font-size: var(--font-size-3xl); margin-bottom: var(--gap-lg); color: var(--clr-text); text-align: center; background: linear-gradient(90deg, #00e65b, #00BFFF); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Nuestros Objetivos</h2>
+            <div class="about-objectives__grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--gap);">
+                <div class="about-objective" style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.7)); border: 1px solid var(--clr-border); border-radius: var(--radius); padding: var(--gap); text-align: center; transition: transform 0.3s ease;">
+                    <div class="about-objective__icon" style="margin: 0 auto 1rem; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(34, 211, 238, 0.2)); border-radius: var(--radius); color: var(--clr-accent); border: 1px solid var(--clr-border);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4.5L8 0l6 4.5"/>
+                            <path d="M7.293 14.5a1.98 1.98 0 0 1-.293.5 1 1 0 0 1-1 0 1.98 1.98 0 0 1-.293-.5 1.98 1.98 0 0 1-.293.5 1 1 0 0 1-1 0 1.98 1.98 0 0 1-.293-.5 1.98 1.98 0 0 1-.293.5 1 1 0 0 1-1 0 1.98 1.98 0 0 1-.293-.5 1.98 1.98 0 0 1-.293.5 1 1 0 0 1-1 0 1.98 1.98 0 0 1-.293-.5"/>
+                        </svg>
+                    </div>
+                    <h3 class="about-objective__title" style="font-size: var(--font-size-lg); font-weight: 600; margin-bottom: 0.75rem; color: #00e65b;">Fomentar la Colaboraci&oacute;n</h3>
+                    <p class="about-objective__text" style="color: var(--clr-muted); font-size: var(--font-size-sm); line-height: 1.6;">Conectar estudiantes con intereses comunes para trabajar en proyectos juntos</p>
+                </div>
+
+                <div class="about-objective" style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.7)); border: 1px solid var(--clr-border); border-radius: var(--radius); padding: var(--gap); text-align: center; transition: transform 0.3s ease;">
+                    <div class="about-objective__icon" style="margin: 0 auto 1rem; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(34, 211, 238, 0.2)); border-radius: var(--radius); color: var(--clr-accent); border: 1px solid var(--clr-border);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1M1.5 4a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1h-13z"/>
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.5 4.007v4.008a3.5 3.5 0 0 0 3 3.428 3.5 3.5 0 0 0 3-3.428V4.007H5.5Z"/>
+                        </svg>
+                    </div>
+                    <h3 class="about-objective__title" style="font-size: var(--font-size-lg); font-weight: 600; margin-bottom: 0.75rem; color: #00e65b;">Aprendizaje Pr&aacute;ctico</h3>
+                    <p class="about-objective__text" style="color: var(--clr-muted); font-size: var(--font-size-sm); line-height: 1.6;">Impulsar el desarrollo de habilidades mediante proyectos reales</p>
+                </div>
+
+                <div class="about-objective" style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.7)); border: 1px solid var(--clr-border); border-radius: var(--radius); padding: var(--gap); text-align: center; transition: transform 0.3s ease;">
+                    <div class="about-objective__icon" style="margin: 0 auto 1rem; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(34, 211, 238, 0.2)); border-radius: var(--radius); color: var(--clr-accent); border: 1px solid var(--clr-border);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M14 3a 1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12zM2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2z"/>
+                            <path d="M7.5 10.5v-3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5m1-5.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0"/>
+                        </svg>
+                    </div>
+                    <h3 class="about-objective__title" style="font-size: var(--font-size-lg); font-weight: 600; margin-bottom: 0.75rem; color: #00e65b;">Construir Comunidades</h3>
+                    <p class="about-objective__text" style="color: var(--clr-muted); font-size: var(--font-size-sm); line-height: 1.6;">Crear espacios donde los estudiantes puedan compartir conocimientos</p>
+                </div>
+
+                <div class="about-objective" style="background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.7)); border: 1px solid var(--clr-border); border-radius: var(--radius); padding: var(--gap); text-align: center; transition: transform 0.3s ease;">
+                    <div class="about-objective__icon" style="margin: 0 auto 1rem; width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(34, 211, 238, 0.2)); border-radius: var(--radius); color: var(--clr-accent); border: 1px solid var(--clr-border);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M14 10.5a.5.5 0 0 0 .5-.5V7.5a.5.5 0 0 0-.5-.5h-3A.5.5 0 0 0 11 7.5v2.5a.5.5 0 0 0 .5.5zm-5 1a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5zm0-5a.5.5 0 0 1 .5-.5h5c.276 0 .5.224.5.5v2a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5m0-5a.5.5 0 0 1 .5-.5h5c.276 0 .5.224.5.5v2a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5"/>
+                        </svg>
+                    </div>
+                    <h3 class="about-objective__title" style="font-size: var(--font-size-lg); font-weight: 600; margin-bottom: 0.75rem; color: #00e65b;">Innovaci&oacute;n Acad&eacute;mica</h3>
+                    <p class="about-objective__text" style="color: var(--clr-muted); font-size: var(--font-size-sm); line-height: 1.6;">Impulsar la creación de soluciones tecnológicas con impacto social</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .about-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+    }
+    
+    .about-objective:hover {
+        transform: translateY(-5px);
+    }
+    
+    .about-objective__icon:hover {
+        transform: scale(1.1);
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(34, 211, 238, 0.3));
+    }
+</style>

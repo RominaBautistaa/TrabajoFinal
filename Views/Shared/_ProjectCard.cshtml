@@ -1,0 +1,70 @@
+@model TrabajoFinal.Models.Project
+
+<div class="card project-card">
+    <div class="card__image">
+        <div class="card__image-placeholder">
+            @Model.Title.Substring(0, Math.Min(3, Model.Title.Length)).ToUpper()
+        </div>
+    </div>
+    <div class="card__content">
+        <div class="card__header">
+            <span class="card__category">@Model.Category</span>
+            <h3 class="card__title">
+                <a asp-controller="Projects" asp-action="Detail" asp-route-id="@Model.Id" class="card__title-link">@Model.Title</a>
+            </h3>
+        </div>
+        <p class="card__summary">@Model.Summary</p>
+        
+        <div class="card__footer">
+            <div class="card__meta">
+                <span class="chip chip--@($"status-{Model.Status.ToLower().Replace(" ", "-")}")">@Model.Status</span>
+            </div>
+            
+            <div class="card__tags">
+                @if (!string.IsNullOrEmpty(Model.Tags))
+                {
+                    @foreach (var tag in Model.Tags.Split(',').Select(t => t.Trim()).Take(3))
+                    {
+                        <span class="chip chip--tag">@tag</span>
+                    }
+                    @if (Model.Tags.Split(',').Length > 3)
+                    {
+                        <span class="chip chip--more">+@(Model.Tags.Split(',').Length - 3)</span>
+                    }
+                }
+            </div>
+            
+            <div class="card__date">
+                Actualizado: @Model.UpdatedAt.ToString("dd MMM yyyy")
+            </div>
+            
+            <div class="card__author">
+                <span>por @Model.User?.UserName</span>
+            </div>
+        </div>
+        
+        @if (User?.Identity?.IsAuthenticated == true && Model.UserId != User.Identity.Name)
+        {
+            <div class="card__actions" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--clr-border);">
+                <a asp-controller="JoinRequests" asp-action="Create" asp-route-projectId="@Model.Id" class="btn btn--primary btn--block">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                    </svg>
+                    Unirse al Proyecto
+                </a>
+            </div>
+        }
+        else if (User?.Identity?.IsAuthenticated != true && Model.UserId != User.Identity?.Name)
+        {
+            <div class="card__actions" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--clr-border);">
+                <p style="text-align: center; color: var(--clr-muted); font-size: var(--font-size-sm); margin: 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 0.5rem; vertical-align: middle;">
+                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2"/>
+                    </svg>
+                    Para poder unirte a un proyecto, primero debes iniciar sesión.
+                    <a href="/Account/Login" style="color: var(--clr-primary); text-decoration: none; font-weight: 500;">Inicia sesión aquí</a>
+                </p>
+            </div>
+        }
+    </div>
+</div>

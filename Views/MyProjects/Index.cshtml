@@ -1,0 +1,91 @@
+@model IEnumerable<TrabajoFinal.Models.Project>
+@{
+    ViewData["Title"] = "Mis Proyectos";
+}
+
+<div class="page-header" style="margin-bottom: 2rem;">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h1 class="page-title" style="margin-top: 60px;">Mis Proyectos</h1>
+            <p class="page-subtitle">Gestiona tus proyectos personales</p>
+        </div>
+        <div>
+            <a asp-action="Create" class="btn btn--primary">Subir Proyecto</a>
+        </div>
+    </div>
+</div>
+
+<div class="projects-page" style="padding-bottom: var(--gap-lg);">
+    <div class="container">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        @if (Model.Any())
+        {
+            <div class="projects-grid">
+                @foreach (var project in Model)
+                {
+                    <div class="card">
+                        <div class="card__image">
+                            <div class="project-image-placeholder">
+                                @if (!string.IsNullOrEmpty(project.Title))
+                                {
+                                    @project.Title.Substring(0, Math.Min(2, project.Title.Length)).ToUpper()
+                                }
+                                else
+                                {
+                                    <text>PROY</text>
+                                }
+                            </div>
+                        </div>
+                        <div class="card__content">
+                            <div class="card__header">
+                                <span class="card__category">@project.Category</span>
+                                <h3 class="card__title">
+                                    <a asp-controller="Projects" asp-action="Details" asp-route-id="@project.Id" class="card__title-link">@project.Title</a>
+                                </h3>
+                            </div>
+                            
+                            <p class="card__summary">@project.Summary</p>
+                            
+                            <div class="card__meta">
+                                <span class="card__date">@project.UpdatedAt.ToString("dd/MM/yyyy")</span>
+                                <span class="chip chip--status-@(project.Status?.ToLower().Replace(" ", "-") ?? "activo")">@project.Status</span>
+                            </div>
+                            
+                            <div class="card__tags">
+                                @if (!string.IsNullOrEmpty(project.Tags))
+                                {
+                                    @foreach (var tag in project.Tags.Split(','))
+                                    {
+                                        <span class="chip chip--tag">@tag.Trim()</span>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="card__footer">
+                            <a asp-controller="Projects" asp-action="Manage" asp-route-id="@project.Id" class="btn btn--ghost">Gestionar Proyecto</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="empty-state__content">
+                    <h3 class="empty-state__title">Aún no tienes proyectos</h3>
+                    <p class="empty-state__message">Comienza subiendo tu primer proyecto para que la comunidad pueda verlo y colaborar.</p>
+                    <div class="empty-state__actions">
+                        <a asp-action="Create" class="btn btn--primary">Subir Proyecto</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

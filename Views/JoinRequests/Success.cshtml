@@ -1,0 +1,91 @@
+@{
+    ViewData["Title"] = "Solicitud Enviada";
+}
+
+<div class="page-header">
+    <h1 class="page-title">¡Solicitud Enviada!</h1>
+    <p class="page-subtitle">Tu solicitud para unirte al proyecto ha sido recibida</p>
+</div>
+
+<div class="projects-page">
+    <div class="container">
+        <div class="success-container">
+            <div class="success-content">
+                <div class="success-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm3.5-9.5a.5.5 0 0 1 0 1L6.5 12a.5.5 0 0 1-.708-.708L8.293 8.5H4.5a.5.5 0 0 1 0-1h3.793L5.793 4.5a.5.5 0 0 1 .708-.708l3.5 3.5a.5.5 0 0 1 0 .708z"/>
+                    </svg>
+                </div>
+                <h3 class="success-title">¡Solicitud Enviada Correctamente!</h3>
+                <p class="success-message">
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        @TempData["SuccessMessage"]
+                    }
+                    else
+                    {
+                        <text>Tu solicitud fue enviada correctamente. El creador del proyecto se pondrá en contacto contigo pronto.</text>
+                    }
+                </p>
+                <div class="success-actions">
+                    <a asp-controller="Projects" asp-action="Index" class="btn btn--primary">Ver Otros Proyectos</a>
+                    <a asp-controller="MyProjects" asp-action="Index" class="btn btn--ghost">Mis Proyectos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .success-container {
+        max-width: 600px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 70vh;
+    }
+    
+    .success-content {
+        text-align: center;
+        background-color: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        padding: 2.5rem;
+        box-shadow: var(--shadow);
+        width: 100%;
+        max-width: 500px;
+    }
+    
+    .success-icon {
+        margin: 0 auto 1.5rem;
+        width: 64px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, var(--clr-primary), var(--clr-accent));
+        border-radius: 50%;
+        color: white;
+    }
+    
+    .success-title {
+        font-size: var(--font-size-2xl);
+        margin-bottom: 1rem;
+        color: var(--clr-text);
+    }
+    
+    .success-message {
+        color: var(--clr-muted);
+        font-size: var(--font-size-lg);
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+    
+    .success-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+</style>

@@ -1,0 +1,122 @@
+@model TrabajoFinal.Models.Project
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["Description"] = Model.Summary;
+}
+
+<article class="project-detail">
+    <div class="container">
+        <!-- TODO: Breadcrumb navigation -->
+        <nav class="breadcrumb" role="navigation" aria-label="Breadcrumb">
+            <ol class="breadcrumb__list">
+                <li class="breadcrumb__item">
+                    <a href="/" class="breadcrumb__link">Inicio</a>
+                </li>
+                <li class="breadcrumb__item">
+                    <a href="/Projects" class="breadcrumb__link">Proyectos</a>
+                </li>
+                <li class="breadcrumb__item breadcrumb__item--current" aria-current="page">
+                    @Model.Title
+                </li>
+            </ol>
+        </nav>
+
+        <!-- TODO: Header del proyecto -->
+        <header class="project-header">
+            <div class="project-header__content">
+                <h1 class="project-header__title">@Model.Title</h1>
+
+                <!-- TODO: Metadata del proyecto -->
+                <div class="project-header__meta">
+                    <span class="chip chip--category">@Model.Category</span>
+                    <span class="chip chip--status chip--status-@Model.Status.ToLower().Replace(" ", "-")">@Model.Status</span>
+                </div>
+
+                <!-- TODO: Tags del proyecto -->
+                <div class="project-header__tags" role="list" aria-label="Tecnologías utilizadas">
+                    @if (!string.IsNullOrEmpty(Model.Tags))
+                    {
+                        @foreach (var tag in Model.Tags.Split(',').Select(t => t.Trim()))
+                        {
+                            <a href="/Projects?tag=@tag" class="chip chip--tag" role="listitem">@tag</a>
+                        }
+                    }
+                </div>
+            </div>
+
+            <!-- TODO: Placeholder de imagen principal -->
+            <div class="project-header__image">
+                <div class="project-image-placeholder">
+                    <span class="project-image-text">@Model.Category</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="project-content">
+            <!-- TODO: Contenido principal -->
+            <div class="project-main">
+                <!-- Resumen -->
+                <section class="project-section">
+                    <h2 class="project-section__title">Resumen</h2>
+                    <p class="project-section__content project-section__content--summary">@Model.Summary</p>
+                </section>
+
+                <!-- Descripción detallada -->
+                <section class="project-section">
+                    <h2 class="project-section__title">Descripción</h2>
+                    <div class="project-section__content">
+                        <p>@Model.Description</p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- TODO: Sidebar con información adicional -->
+            <aside class="project-sidebar">
+                <div class="project-info">
+                    <h3 class="project-info__title">Información del Proyecto</h3>
+
+                    <dl class="project-info__list">
+                        <dt class="project-info__term">Estado</dt>
+                        <dd class="project-info__value">
+                            <span class="chip chip--status chip--status-@Model.Status.ToLower().Replace(" ", "-")">@Model.Status</span>
+                        </dd>
+
+                        <dt class="project-info__term">Categoría</dt>
+                        <dd class="project-info__value">
+                            <a href="/Projects?category=@Model.Category" class="project-info__link">@Model.Category</a>
+                        </dd>
+
+                        <dt class="project-info__term">Última actualización</dt>
+                        <dd class="project-info__value">
+                            <time datetime="@Model.UpdatedAt.ToString("yyyy-MM-dd")">
+                                @Model.UpdatedAt.ToString("dd/MM/yyyy")
+                            </time>
+                        </dd>
+                    </dl>
+                </div>
+
+                <!-- TODO: Acciones del proyecto -->
+                <div class="project-actions">
+                    <a href="/Projects" class="btn btn--primary btn--block">Ver Más Proyectos</a>
+                    <a href="/Projects?category=@Model.Category" class="btn btn--ghost btn--block">Más de @Model.Category</a>
+                </div>
+            </aside>
+        </div>
+
+        <!-- TODO: Proyectos relacionados -->
+        @if (ViewBag.RelatedProjects != null && ((IEnumerable<TrabajoFinal.Models.Project>)ViewBag.RelatedProjects).Any())
+        {
+            <section class="related-projects" aria-labelledby="related-projects-title">
+                <h2 class="section-title__heading" id="related-projects-title">Proyectos Relacionados</h2>
+                <p class="section-title__subtitle">Más proyectos de la categoría @Model.Category</p>
+
+                <div class="projects-grid projects-grid--compact">
+                    @foreach (var relatedProject in (IEnumerable<TrabajoFinal.Models.Project>)ViewBag.RelatedProjects)
+                    {
+                        @await Html.PartialAsync("_ProjectCard", relatedProject)
+                    }
+                </div>
+            </section>
+        }
+    </div>
+</article>

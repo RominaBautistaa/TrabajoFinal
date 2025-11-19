@@ -1,0 +1,197 @@
+@model TrabajoFinal.Controllers.LoginViewModel
+@{
+    ViewData["Title"] = "Iniciar Sesión";
+}
+
+<div class="auth-container">
+    <div class="auth-form">
+        <div class="auth-logo">
+            <img src="~/img/logo.png" alt="CoWorkU Logo" class="logo logo--auth" />
+        </div>
+        <h2>Iniciar Sesión</h2>
+        <form asp-action="Login" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger validation-summary"></div>
+            
+            <div class="form-group">
+                <label asp-for="Email" class="form-label">Correo Electrónico</label>
+                <input asp-for="Email" class="form-input" type="email" placeholder="tu@email.com" />
+                <span asp-validation-for="Email" class="text-danger form-validation-message"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Password" class="form-label">Contraseña</label>
+                <input asp-for="Password" class="form-input" type="password" placeholder="••••••••" />
+                <span asp-validation-for="Password" class="text-danger form-validation-message"></span>
+            </div>
+            
+            <div class="form-options">
+                <div class="form-check">
+                    <input asp-for="RememberMe" class="form-check-input" id="rememberMe" />
+                    <label asp-for="RememberMe" class="form-check-label" for="rememberMe">Recordarme</label>
+                </div>
+                <!-- TODO: Añadir enlace de "¿Olvidaste tu contraseña?" -->
+            </div>
+            
+            <input type="hidden" asp-for="ReturnUrl" />
+            <button type="submit" class="btn btn--primary btn--block">Iniciar Sesión</button>
+        </form>
+        
+        <div class="auth-footer">
+            <p>¿No tienes cuenta? <a asp-action="Register" class="auth-link">Regístrate aquí</a></p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .auth-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 70vh;
+        padding: 2rem 1rem;
+    }
+    
+    .auth-form {
+        background-color: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        padding: 2.5rem;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: var(--shadow);
+    }
+    
+    .auth-form h2 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: var(--clr-text);
+        font-size: var(--font-size-2xl);
+    }
+    
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--clr-text);
+        font-weight: 500;
+        font-size: var(--font-size-sm);
+    }
+    
+    .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        background-color: var(--clr-bg);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius-sm);
+        color: var(--clr-text);
+        font-size: var(--font-size-base);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        box-sizing: border-box;
+    }
+    
+    .form-input:focus {
+        outline: none;
+        border-color: var(--clr-primary);
+        box-shadow: 0 0 0 2px rgba(0, 200, 81, 0.2);
+    }
+    
+    .form-input:invalid:not(:focus):not(:placeholder-shown) {
+        border-color: var(--clr-danger);
+    }
+    
+    .form-input:valid:not(:focus):not(:placeholder-shown) {
+        border-color: var(--clr-success);
+    }
+    
+    .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.25rem;
+        font-size: var(--font-size-sm);
+    }
+    
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .form-check-input {
+        margin: 0;
+        width: 16px;
+        height: 16px;
+        border: 1px solid var(--clr-border);
+        border-radius: 4px;
+        background-color: var(--clr-bg);
+        color: var(--clr-text);
+    }
+    
+    .form-check-label {
+        color: var(--clr-muted);
+        font-size: var(--font-size-sm);
+        cursor: pointer;
+    }
+    
+    .validation-summary {
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        background-color: rgba(239, 68, 68, 0.1);
+        border: 1px solid var(--clr-danger);
+        border-radius: var(--radius-sm);
+        color: var(--clr-danger);
+        font-size: var(--font-size-sm);
+    }
+    
+    .form-validation-message {
+        display: block;
+        margin-top: 0.5rem;
+        font-size: var(--font-size-xs);
+        color: var(--clr-danger);
+    }
+    
+    .auth-footer {
+        text-align: center;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--clr-border);
+        color: var(--clr-muted);
+        font-size: var(--font-size-sm);
+    }
+    
+    .auth-link {
+        color: var(--clr-primary);
+        font-weight: 500;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+    
+    .auth-link:hover {
+        color: var(--clr-accent);
+        text-decoration: underline;
+    }
+    
+    .btn--block {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .auth-logo {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .auth-logo img {
+        height: 90px; /* Between 80-100px as specified */
+        width: auto;
+        max-width: 100%;
+    }
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
