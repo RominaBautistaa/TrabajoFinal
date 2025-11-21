@@ -23,7 +23,13 @@ namespace TrabajoFinal.Models
         public string Message { get; set; } = string.Empty;
 
         public DateTime DateSubmitted { get; set; } = DateTime.Now;
-        
+
         public DateTime DateCreated { get; set; } = DateTime.Now;
+
+        public string Status { get; set; } = "Pending";
+
+        // Navigation properties
+        public virtual Project? Project { get; set; }
+        public virtual ApplicationUser? User { get; set; }
     }
 }

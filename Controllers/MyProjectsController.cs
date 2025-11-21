@@ -23,12 +23,65 @@ namespace TrabajoFinal.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = _userManager.GetUserId(User);
-            var userProjects = await _context.Projects
+
+            // Get projects where user is the creator and projects where user is a member
+            var createdProjects = await _context.Projects
                 .Where(p => p.UserId == userId)
-                .OrderByDescending(p => p.UpdatedAt)
                 .ToListAsync();
-            
-            return View(userProjects);
+
+            var memberProjects = await _context.ProjectMembers
+                .Where(pm => pm.UserId == userId)
+                .Select(pm => pm.Project)
+                .ToListAsync();
+
+            // Combine both lists and remove duplicates
+            var allProjects = createdProjects
+                .Concat(memberProjects)
+                .Distinct()
+                .OrderByDescending(p => p.UpdatedAt)
+                .ToList();
+
+            // Obtener conteo de miembros para cada proyecto
+            var projectMemberCounts = new Dictionary<int, int>();
+            var allProjectMemberCounts = await _context.ProjectMembers
+                .GroupBy(pm => pm.ProjectId)
+                .Select(g => new { ProjectId = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            foreach (var count in allProjectMemberCounts)
+            {
+                projectMemberCounts[count.ProjectId] = count.Count;
+            }
+            ViewBag.ProjectMemberCounts = projectMemberCounts;
+
+            // Obtener si el usuario actual es miembro de cada proyecto
+            var projectMemberList = new Dictionary<int, bool>();
+            var userProjectMembers = await _context.ProjectMembers
+                .Where(pm => pm.UserId == userId)
+                .Select(pm => pm.ProjectId)
+                .ToListAsync();
+
+            foreach (var projectId in userProjectMembers)
+            {
+                projectMemberList[projectId] = true;
+            }
+            ViewBag.ProjectMemberList = projectMemberList;
+
+            // Obtener solicitudes del usuario actual
+            var userJoinRequests = new Dictionary<int, string>();
+            var allProjectIds = allProjects.Select(p => p.Id).ToList(); // Todos los proyectos que se están mostrando
+            var userRequests = await _context.JoinRequests
+                .Where(jr => jr.UserId == userId && allProjectIds.Contains(jr.ProjectId))
+                .Select(jr => new { jr.ProjectId, jr.Status })
+                .ToListAsync();
+
+            foreach (var request in userRequests)
+            {
+                userJoinRequests[request.ProjectId] = request.Status;
+            }
+            ViewBag.UserJoinRequests = userJoinRequests;
+
+            return View(allProjects);
         }
 
         // GET: MyProjects/Create

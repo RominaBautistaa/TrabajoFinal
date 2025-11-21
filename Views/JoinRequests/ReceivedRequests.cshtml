@@ -1,0 +1,150 @@
+@model IEnumerable<TrabajoFinal.Models.JoinRequest>
+@{
+    ViewData["Title"] = "Solicitudes Recibidas";
+}
+
+<div class="page-header">
+    <h1 class="page-title">Solicitudes Recibidas</h1>
+    <p class="page-subtitle">Gestiona las solicitudes para unirse a tus proyectos</p>
+</div>
+
+<div class="projects-page">
+    <div class="container">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+        
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        @if (Model.Any())
+        {
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Proyecto</th>
+                            <th>Solicitante</th>
+                            <th>Skills</th>
+                            <th>Mensaje</th>
+                            <th>Teléfono</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var request in Model)
+                        {
+                            <tr>
+                                <td>@request.Project?.Title</td>
+                                <td>@request.User?.UserName</td>
+                                <td>@request.Skills</td>
+                                <td>@request.Message</td>
+                                <td>@request.Phone</td>
+                                <td>@request.DateSubmitted.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>
+                                    <span class="chip chip--status-@(request.Status?.ToLower().Replace(" ", "-") ?? "pending")">@request.Status</span>
+                                </td>
+                                <td>
+                                    @if (request.Status == "Pending")
+                                    {
+                                        <form asp-action="Accept" asp-route-id="@request.Id" method="post" style="display: inline;" class="action-form">
+                                            <button type="submit" class="btn btn--primary btn--small" 
+                                                    onclick="return confirm('¿Estás seguro de que deseas aceptar esta solicitud?')">Aceptar</button>
+                                        </form>
+                                        <form asp-action="Reject" asp-route-id="@request.Id" method="post" style="display: inline;" class="action-form">
+                                            <button type="submit" class="btn btn--secondary btn--small" 
+                                                    onclick="return confirm('¿Estás seguro de que deseas rechazar esta solicitud?')">Rechazar</button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="empty-state__content">
+                    <h3 class="empty-state__title">No tienes solicitudes recibidas</h3>
+                    <p class="empty-state__message">Cuando otros usuarios soliciten unirse a tus proyectos, aparecerán aquí para que puedas gestionarlas.</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        overflow: hidden;
+    }
+
+    .table th,
+    .table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--clr-border);
+    }
+
+    .table th {
+        background-color: rgba(255, 255, 255, 0.05);
+        font-weight: 600;
+        color: var(--clr-text);
+    }
+
+    .table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .text-muted {
+        color: var(--clr-muted);
+    }
+
+    .btn--small {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        margin-right: 0.25rem;
+    }
+
+    .action-form {
+        margin: 0 0.25rem 0 0;
+    }
+
+    .chip--status-pending {
+        background-color: #4a90e2;
+        color: white;
+    }
+
+    .chip--status-accepted {
+        background-color: #00C851;
+        color: white;
+    }
+
+    .chip--status-rejected {
+        background-color: #ff5252;
+        color: white;
+    }
+</style>

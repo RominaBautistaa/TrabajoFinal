@@ -206,4 +206,5 @@ C:\Users\romin\Downloads\TrabajoFinal\TrabajoFinal\TrabajoFinal\TrabajoFinal\obj
 C:\Users\romin\Downloads\TrabajoFinal\TrabajoFinal\TrabajoFinal\TrabajoFinal\obj\Debug\net8.0\TrabajoFinal.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\romin\Downloads\TrabajoFinal\TrabajoFinal\TrabajoFinal\TrabajoFinal\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 C:\Users\romin\Downloads\TrabajoFinal\TrabajoFinal\TrabajoFinal\TrabajoFinal\bin\Debug\net8.0\Microsoft.AspNetCore.Identity.UI.dll
+C:\Users\romin\Downloads\TrabajoFinal\TrabajoFinal\TrabajoFinal\TrabajoFinal\obj\Debug\net8.0\TrabajoFinal.sourcelink.json
 C:\Users\romin\Downloads\TrabajoFinal\TrabajoFinal\TrabajoFinal\TrabajoFinal\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

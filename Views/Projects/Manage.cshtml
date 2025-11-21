@@ -83,6 +83,58 @@
     </div>
 </div>
 
+<!-- Sección de Equipo del Proyecto -->
+@if (Model.Members?.Any() == true)
+{
+    <div class="container" style="margin-top: 2rem;">
+        <div class="section-header">
+            <h2 class="section-title">Mi Equipo</h2>
+            <p class="section-subtitle">Miembros del proyecto "@Model.Title"</p>
+        </div>
+
+        <div class="team-grid">
+            @foreach (var member in Model.Members)
+            {
+                <div class="team-member-card">
+                    <div class="member-info">
+                        <div class="member-avatar">
+                            @if (!string.IsNullOrEmpty(member.User?.UserName))
+                            {
+                                <span class="avatar-text">@member.User.UserName.Substring(0, Math.Min(2, member.User.UserName.Length)).ToUpper()</span>
+                            }
+                            else
+                            {
+                                <span class="avatar-text">??</span>
+                            }
+                        </div>
+                        <div class="member-details">
+                            <h4 class="member-name">@member.User?.UserName</h4>
+                            <p class="member-role">@member.Role</p>
+                            <small class="member-joined">Unido: @member.JoinedAt.ToString("dd/MM/yyyy")</small>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="container" style="margin-top: 2rem;">
+        <div class="section-header">
+            <h2 class="section-title">Mi Equipo</h2>
+            <p class="section-subtitle">Miembros del proyecto "@Model.Title"</p>
+        </div>
+
+        <div class="empty-state">
+            <div class="empty-state__content">
+                <h3 class="empty-state__title">Aún no hay miembros en el equipo</h3>
+                <p class="empty-state__message">Cuando otros usuarios se unan a tu proyecto, aparecerán aquí.</p>
+            </div>
+        </div>
+    </div>
+}
+
 <!-- Modal de confirmación de eliminación -->
 <div id="deleteModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; justify-content: center; align-items: center;">
     <div class="modal-content" style="background-color: var(--clr-surface); border: 1px solid var(--clr-border); border-radius: var(--radius); padding: 1.5rem; width: 90%; max-width: 500px; box-shadow: var(--shadow);">
@@ -208,6 +260,76 @@
     
     .modal-footer {
         border-top: 1px solid var(--clr-border);
+    }
+
+    .section-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--clr-text);
+        margin-bottom: 0.5rem;
+    }
+
+    .section-subtitle {
+        color: var(--clr-muted);
+        margin: 0;
+    }
+
+    .team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1rem;
+    }
+
+    .team-member-card {
+        background-color: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .member-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .member-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: var(--clr-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+    }
+
+    .member-details {
+        flex: 1;
+    }
+
+    .member-name {
+        margin: 0 0 0.25rem 0;
+        font-weight: 500;
+        color: var(--clr-text);
+    }
+
+    .member-role {
+        margin: 0 0 0.125rem 0;
+        font-size: 0.875rem;
+        color: var(--clr-muted);
+    }
+
+    .member-joined {
+        color: var(--clr-muted);
+        font-size: 0.75rem;
     }
 </style>
 

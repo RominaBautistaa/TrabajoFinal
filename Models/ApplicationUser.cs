@@ -17,5 +17,8 @@ namespace TrabajoFinal.Models
 
         // Navigation: user skills
         public virtual ICollection<UserSkill> UserSkills { get; set; } = new List<UserSkill>();
+
+        // Navigation: join requests made by this user
+        public virtual ICollection<JoinRequest> JoinRequests { get; set; } = new List<JoinRequest>();
     }
 }

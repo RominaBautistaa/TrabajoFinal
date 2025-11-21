@@ -82,6 +82,22 @@ namespace TrabajoFinal.Data
                 entity.Property(e => e.Question).IsRequired().HasMaxLength(500);
                 entity.Property(e => e.Answer).IsRequired();
             });
+
+            modelBuilder.Entity<JoinRequest>(entity =>
+            {
+                entity.HasKey(jr => jr.Id);
+                entity.Property(jr => jr.Skills).HasMaxLength(int.MaxValue);
+                entity.Property(jr => jr.Message).HasMaxLength(int.MaxValue);
+                entity.Property(jr => jr.Phone).HasMaxLength(50);
+                entity.HasOne(jr => jr.Project)
+                    .WithMany(p => p.JoinRequests)
+                    .HasForeignKey(jr => jr.ProjectId)
+                    .OnDelete(DeleteBehavior.Restrict);  // Changed to Restrict to prevent constraint issues
+                entity.HasOne(jr => jr.User)
+                    .WithMany(u => u.JoinRequests)
+                    .HasForeignKey(jr => jr.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);  // Changed to Restrict to prevent constraint issues
+            });
         }
     }
 }

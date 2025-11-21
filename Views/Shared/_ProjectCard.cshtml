@@ -1,5 +1,38 @@
 @model TrabajoFinal.Models.Project
 
+@{
+    var currentUserId = User?.Identity?.Name;
+    var memberCount = 0;
+    var isMaxReached = false;
+    var isUserMember = false;
+    var userJoinRequestStatus = "";
+
+    // Calculate member count and check if max members reached
+    var memberCounts = ViewBag.ProjectMemberCounts as Dictionary<int, int>;
+    if (memberCounts != null && memberCounts.ContainsKey(Model.Id))
+    {
+        memberCount = memberCounts[Model.Id];
+    }
+    isMaxReached = memberCount >= Model.MaxMembers;
+
+    // Check if user is already a member of this project
+    var projectMemberList = ViewBag.ProjectMemberList as Dictionary<int, bool>;
+    if (projectMemberList != null && currentUserId != null)
+    {
+        isUserMember = projectMemberList.ContainsKey(Model.Id) && projectMemberList[Model.Id];
+    }
+
+    // Check if user has a join request for this project
+    var userJoinRequests = ViewBag.UserJoinRequests as Dictionary<int, string>; // projectId -> status
+    if (userJoinRequests != null && currentUserId != null)
+    {
+        if (userJoinRequests.ContainsKey(Model.Id))
+        {
+            userJoinRequestStatus = userJoinRequests[Model.Id];
+        }
+    }
+}
+
 <div class="card project-card">
     <div class="card__image">
         <div class="card__image-placeholder">
@@ -14,12 +47,12 @@
             </h3>
         </div>
         <p class="card__summary">@Model.Summary</p>
-        
+
         <div class="card__footer">
             <div class="card__meta">
                 <span class="chip chip--@($"status-{Model.Status.ToLower().Replace(" ", "-")}")">@Model.Status</span>
             </div>
-            
+
             <div class="card__tags">
                 @if (!string.IsNullOrEmpty(Model.Tags))
                 {
@@ -33,28 +66,99 @@
                     }
                 }
             </div>
-            
+
             <div class="card__date">
                 Actualizado: @Model.UpdatedAt.ToString("dd MMM yyyy")
             </div>
-            
+
             <div class="card__author">
                 <span>por @Model.User?.UserName</span>
             </div>
+
+            <!-- Member count info -->
+            <div class="card__member-info">
+                <small class="member-count-info">
+                    Miembros: @memberCount/@Model.MaxMembers
+                    @if (isMaxReached)
+                    {
+                        <span class="chip chip--full">Cupo lleno</span>
+                    }
+                </small>
+            </div>
         </div>
-        
-        @if (User?.Identity?.IsAuthenticated == true && Model.UserId != User.Identity.Name)
+
+        @if (User?.Identity?.IsAuthenticated == true && Model.UserId != currentUserId)
         {
             <div class="card__actions" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--clr-border);">
-                <a asp-controller="JoinRequests" asp-action="Create" asp-route-projectId="@Model.Id" class="btn btn--primary btn--block">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
-                    </svg>
-                    Unirse al Proyecto
-                </a>
+                @if (isUserMember)
+                {
+                    <button class="btn btn--secondary btn--block" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                        </svg>
+                        Ya eres miembro
+                    </button>
+                }
+                else if (!string.IsNullOrEmpty(userJoinRequestStatus))
+                {
+                    if (userJoinRequestStatus == "Pending")
+                    {
+                        <button class="btn btn--warning btn--block" disabled>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 4.754a.25.25 0 0 0-.25.25v5.5a.25.25 0 0 0 .25.25h5.5a.25.25 0 0 0 .25-.25v-5.5a.25.25 0 0 0-.25-.25Z"/>
+                            </svg>
+                            Solicitud en proceso
+                        </button>
+                    }
+                    else if (userJoinRequestStatus == "Rejected" && !isMaxReached)
+                    {
+                        <a asp-controller="JoinRequests" asp-action="Create" asp-route-projectId="@Model.Id" class="btn btn--primary btn--block">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                            </svg>
+                            Volver a solicitar
+                        </a>
+                    }
+                    else if (userJoinRequestStatus == "Rejected" && isMaxReached)
+                    {
+                        <button class="btn btn--disabled btn--block" disabled>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                            </svg>
+                            Cupo lleno
+                        </button>
+                    }
+                    else if (userJoinRequestStatus == "Accepted")
+                    {
+                        <button class="btn btn--secondary btn--block" disabled>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                            </svg>
+                            Ya eres miembro
+                        </button>
+                    }
+                }
+                else if (isMaxReached)
+                {
+                    <button class="btn btn--disabled btn--block" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                        </svg>
+                        Cupo lleno
+                    </button>
+                }
+                else
+                {
+                    <a asp-controller="JoinRequests" asp-action="Create" asp-route-projectId="@Model.Id" class="btn btn--primary btn--block">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                        </svg>
+                        Unirse al Proyecto
+                    </a>
+                }
             </div>
         }
-        else if (User?.Identity?.IsAuthenticated != true && Model.UserId != User.Identity?.Name)
+        else if (User?.Identity?.IsAuthenticated != true && Model.UserId != currentUserId)
         {
             <div class="card__actions" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--clr-border);">
                 <p style="text-align: center; color: var(--clr-muted); font-size: var(--font-size-sm); margin: 0;">
@@ -68,3 +172,40 @@
         }
     </div>
 </div>
+
+<style>
+    .member-count-info {
+        color: var(--clr-muted);
+        display: block;
+        margin-top: 0.25rem;
+    }
+
+    .chip--full {
+        background-color: #ff5252;
+        color: white;
+        font-size: 0.75rem;
+        padding: 0.125rem 0.375rem;
+        border-radius: var(--radius-sm);
+        margin-left: 0.25rem;
+    }
+
+    .btn--disabled {
+        background-color: var(--clr-muted);
+        color: var(--clr-text-light);
+        border-color: var(--clr-muted);
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    .btn--secondary {
+        background-color: var(--clr-secondary) !important;
+        color: white;
+        border-color: var(--clr-secondary) !important;
+    }
+
+    .btn--warning {
+        background-color: #ff9800 !important;
+        color: white;
+        border-color: #ff9800 !important;
+    }
+</style>

@@ -29,7 +29,7 @@ namespace TrabajoFinal.Controllers
             try
             {
                 _logger.LogInformation($"Iniciando carga de proyectos para Projects page. Filtros - q: {q}, category: {category}, tag: {tag}");
-                
+
                 // Obtener todos los proyectos desde la base de datos incluyendo la información de usuario
                 var allProjects = await _context.Projects
                     .Include(p => p.User)
@@ -62,14 +62,62 @@ namespace TrabajoFinal.Controllers
 
                 if (!string.IsNullOrEmpty(tag))
                     filteredProjects = filteredProjects.Where(p =>
-                        !string.IsNullOrEmpty(p.Tags) && 
-                        p.Tags.Split(',').Any(t => 
+                        !string.IsNullOrEmpty(p.Tags) &&
+                        p.Tags.Split(',').Any(t =>
                             string.Equals(t.Trim(), tag, StringComparison.OrdinalIgnoreCase)));
 
                 // Ordenar y convertir a lista
                 var projects = filteredProjects
                     .OrderByDescending(p => p.UpdatedAt)
                     .ToList();
+
+                // Obtener conteo de miembros para cada proyecto
+                var projectMemberCounts = new Dictionary<int, int>();
+                var allProjectMemberCounts = await _context.ProjectMembers
+                    .GroupBy(pm => pm.ProjectId)
+                    .Select(g => new { ProjectId = g.Key, Count = g.Count() })
+                    .ToListAsync();
+
+                foreach (var count in allProjectMemberCounts)
+                {
+                    projectMemberCounts[count.ProjectId] = count.Count;
+                }
+
+                ViewBag.ProjectMemberCounts = projectMemberCounts;
+
+                // Obtener si el usuario actual es miembro de cada proyecto
+                var projectMemberList = new Dictionary<int, bool>();
+                if (User.Identity.IsAuthenticated)
+                {
+                    var currentUserId = _userManager.GetUserId(User);
+                    var userProjectMembers = await _context.ProjectMembers
+                        .Where(pm => pm.UserId == currentUserId)
+                        .Select(pm => pm.ProjectId)
+                        .ToListAsync();
+
+                    foreach (var projectId in userProjectMembers)
+                    {
+                        projectMemberList[projectId] = true;
+                    }
+                }
+                ViewBag.ProjectMemberList = projectMemberList;
+
+                // Obtener solicitudes del usuario actual
+                var userJoinRequests = new Dictionary<int, string>();
+                if (User.Identity.IsAuthenticated)
+                {
+                    var currentUserId = _userManager.GetUserId(User);
+                    var userRequests = await _context.JoinRequests
+                        .Where(jr => jr.UserId == currentUserId)
+                        .Select(jr => new { jr.ProjectId, jr.Status })
+                        .ToListAsync();
+
+                    foreach (var request in userRequests)
+                    {
+                        userJoinRequests[request.ProjectId] = request.Status;
+                    }
+                }
+                ViewBag.UserJoinRequests = userJoinRequests;
 
                 // Obtener categorías
                 ViewBag.Categories = allProjects
@@ -89,7 +137,7 @@ namespace TrabajoFinal.Controllers
 
                 ViewBag.HasResults = projects.Any();
                 ViewBag.ResultsCount = projects.Count;
-                
+
                 _logger.LogInformation($"Projects after filtering: {projects.Count}, Categories: {ViewBag.Categories.Count}, Tags: {ViewBag.Tags.Count}");
 
                 return View(projects);
@@ -102,6 +150,7 @@ namespace TrabajoFinal.Controllers
                 ViewBag.ResultsCount = 0;
                 ViewBag.Categories = new List<string>();
                 ViewBag.Tags = new List<string>();
+                ViewBag.ProjectMemberCounts = new Dictionary<int, int>();
 
                 return View(new List<Project>());
             }
@@ -118,6 +167,13 @@ namespace TrabajoFinal.Controllers
             if (project == null)
                 return NotFound();
 
+            // Obtener conteo de miembros para este proyecto
+            var memberCount = await _context.ProjectMembers
+                .Where(pm => pm.ProjectId == id)
+                .CountAsync();
+
+            ViewBag.CurrentMemberCount = memberCount;
+
             // Proyectos relacionados (misma categoría)
             var allProjects = await _context.Projects
                 .Include(p => p.User)
@@ -127,6 +183,59 @@ namespace TrabajoFinal.Controllers
                 .OrderByDescending(p => p.UpdatedAt)
                 .Take(3)
                 .ToList();
+
+            // Obtener conteo de miembros para proyectos relacionados
+            var relatedProjectIds = relatedProjects.Select(p => p.Id).ToList();
+            var relatedProjectMemberCounts = new Dictionary<int, int>();
+            if (relatedProjectIds.Any())
+            {
+                var relatedMemberCounts = await _context.ProjectMembers
+                    .Where(pm => relatedProjectIds.Contains(pm.ProjectId))
+                    .GroupBy(pm => pm.ProjectId)
+                    .Select(g => new { ProjectId = g.Key, Count = g.Count() })
+                    .ToListAsync();
+
+                foreach (var count in relatedMemberCounts)
+                {
+                    relatedProjectMemberCounts[count.ProjectId] = count.Count;
+                }
+            }
+            ViewBag.ProjectMemberCounts = relatedProjectMemberCounts;
+
+            // Obtener si el usuario actual es miembro de cada proyecto relacionado
+            var projectMemberList = new Dictionary<int, bool>();
+            if (User.Identity.IsAuthenticated)
+            {
+                var currentUserId = _userManager.GetUserId(User);
+                var userProjectMembers = await _context.ProjectMembers
+                    .Where(pm => pm.UserId == currentUserId)
+                    .Select(pm => pm.ProjectId)
+                    .ToListAsync();
+
+                foreach (var projectId in userProjectMembers)
+                {
+                    projectMemberList[projectId] = true;
+                }
+            }
+            ViewBag.ProjectMemberList = projectMemberList;
+
+            // Obtener solicitudes del usuario actual para proyectos relacionados y todos los otros proyectos
+            var userJoinRequests = new Dictionary<int, string>();
+            if (User.Identity.IsAuthenticated)
+            {
+                var currentUserId = _userManager.GetUserId(User);
+                var allProjectIds = allProjects.Select(p => p.Id).ToList(); // Todos los proyectos, no solo relacionados
+                var userRequests = await _context.JoinRequests
+                    .Where(jr => jr.UserId == currentUserId && allProjectIds.Contains(jr.ProjectId))
+                    .Select(jr => new { jr.ProjectId, jr.Status })
+                    .ToListAsync();
+
+                foreach (var request in userRequests)
+                {
+                    userJoinRequests[request.ProjectId] = request.Status;
+                }
+            }
+            ViewBag.UserJoinRequests = userJoinRequests;
 
             ViewBag.RelatedProjects = relatedProjects;
 
@@ -138,16 +247,19 @@ namespace TrabajoFinal.Controllers
         [Authorize]
         public async Task<IActionResult> Manage(int id)
         {
-            var project = await _context.Projects.FindAsync(id);
-            
+            var project = await _context.Projects
+                .Include(p => p.Members)
+                    .ThenInclude(m => m.User)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
             if (project == null)
                 return NotFound();
-                
+
             // Verificar que el proyecto pertenece al usuario autenticado
             var currentUserId = _userManager.GetUserId(User);
             if (project.UserId != currentUserId)
                 return Forbid();
-                
+
             return View(project);
         }
 

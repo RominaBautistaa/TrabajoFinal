@@ -1,0 +1,225 @@
+@model TrabajoFinal.Controllers.NotificationsViewModel
+@{
+    ViewData["Title"] = "Mis Notificaciones";
+}
+
+<div class="page-header">
+    <h1 class="page-title">Mis Notificaciones</h1>
+    <p class="page-subtitle">Mantente informado sobre solicitudes y miembros de tus proyectos</p>
+</div>
+
+<div class="projects-page">
+    <div class="container">
+        @if (Model.JoinRequestNotifications.Any() || Model.ProjectMemberNotifications.Any())
+        {
+            <!-- Notificaciones de solicitudes -->
+            @if (Model.JoinRequestNotifications.Any())
+            {
+                <section class="notifications-section">
+                    <h2 class="section-title">Solicitudes de Unión</h2>
+                    <div class="notifications-list">
+                        @foreach (var request in Model.JoinRequestNotifications)
+                        {
+                            <div class="notification-card">
+                                <div class="notification-icon">
+                                    @if (request.Status == "Accepted")
+                                    {
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
+                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                        </svg>
+                                    }
+                                    else if (request.Status == "Rejected")
+                                    {
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16">
+                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+                                        </svg>
+                                    }
+                                    else
+                                    {
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
+                                            <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+                                            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
+                                        </svg>
+                                    }
+                                </div>
+                                <div class="notification-content">
+                                    <h3 class="notification-title">
+                                        @if (request.Status == "Accepted")
+                                        {
+                                            <text>¡Solicitud aceptada!</text>
+                                        }
+                                        else if (request.Status == "Rejected")
+                                        {
+                                            <text>Solicitud rechazada</text>
+                                        }
+                                        else
+                                        {
+                                            <text>Solicitud pendiente</text>
+                                        }
+                                    </h3>
+                                    <p class="notification-message">
+                                        @if (request.Status == "Accepted")
+                                        {
+                                            <text>Has sido aceptado en el proyecto "@request.Project?.Title"</text>
+                                        }
+                                        else if (request.Status == "Rejected")
+                                        {
+                                            <text>Tu solicitud para unirte al proyecto "@request.Project?.Title" ha sido rechazada</text>
+                                        }
+                                        else
+                                        {
+                                            <text>Tu solicitud para unirte al proyecto "@request.Project?.Title" está pendiente</text>
+                                        }
+                                    </p>
+                                    <small class="notification-date">@request.DateSubmitted.ToString("dd/MM/yyyy HH:mm")</small>
+                                </div>
+                                <div class="notification-status">
+                                    <span class="chip chip--status-@(request.Status?.ToLower().Replace(" ", "-") ?? "pending")">@request.Status</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </section>
+            }
+
+            <!-- Notificaciones de miembros nuevos en mis proyectos -->
+            @if (Model.ProjectMemberNotifications.Any())
+            {
+                <section class="notifications-section" style="margin-top: 2rem;">
+                    <h2 class="section-title">Miembros en Mis Proyectos</h2>
+                    <div class="notifications-list">
+                        @foreach (var member in Model.ProjectMemberNotifications)
+                        {
+                            <div class="notification-card">
+                                <div class="notification-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-people-fill" viewBox="0 0 16 16">
+                                        <path d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7Zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216ZM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
+                                    </svg>
+                                </div>
+                                <div class="notification-content">
+                                    <h3 class="notification-title">Nuevo miembro en tu proyecto</h3>
+                                    <p class="notification-message">
+                                        @member.User?.UserName se ha unido a "@member.Project?.Title"
+                                    </p>
+                                    <small class="notification-date">@member.JoinedAt.ToString("dd/MM/yyyy HH:mm")</small>
+                                </div>
+                                <div class="notification-status">
+                                    <span class="chip chip--role">@member.Role</span>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </section>
+            }
+        }
+        else
+        {
+            <div class="empty-state">
+                <div class="empty-state__content">
+                    <h3 class="empty-state__title">No tienes notificaciones</h3>
+                    <p class="empty-state__message">Aquí aparecerán las notificaciones sobre tus solicitudes y proyectos cuando ocurran.</p>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .notifications-section {
+        margin-bottom: 2rem;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--clr-text);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--clr-border);
+    }
+    
+    .notifications-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .notification-card {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+        background-color: var(--clr-surface);
+        border: 1px solid var(--clr-border);
+        border-radius: var(--radius);
+    }
+    
+    .notification-icon {
+        flex-shrink: 0;
+        margin-top: 0.25rem;
+    }
+    
+    .notification-content {
+        flex: 1;
+    }
+    
+    .notification-title {
+        margin: 0 0 0.25rem 0;
+        font-weight: 500;
+        color: var(--clr-text);
+    }
+    
+    .notification-message {
+        margin: 0 0 0.25rem 0;
+        color: var(--clr-text-secondary);
+    }
+    
+    .notification-date {
+        color: var(--clr-muted);
+        font-size: 0.875rem;
+    }
+    
+    .notification-status {
+        flex-shrink: 0;
+    }
+    
+    .chip--status-pending {
+        background-color: #4a90e2;
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.75rem;
+    }
+    
+    .chip--status-accepted {
+        background-color: #00C851;
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.75rem;
+    }
+    
+    .chip--status-rejected {
+        background-color: #ff5252;
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.75rem;
+    }
+    
+    .chip--role {
+        background-color: #6c757d;
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.75rem;
+    }
+    
+    .text-success {
+        color: #00C851 !important;
+    }
+    
+    .text-danger {
+        color: #ff5252 !important;
+    }
+</style>

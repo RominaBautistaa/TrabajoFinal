@@ -50,6 +50,15 @@
                         <li class="nav__item">
                             <a href="/MyProjects" class="nav__link @(ViewContext.RouteData.Values["controller"]?.ToString() == "MyProjects" ? "nav__link--active" : "")">Mis Proyectos</a>
                         </li>
+                        <li class="nav__item">
+                            <a href="/JoinRequests/ReceivedRequests" class="nav__link @(ViewContext.RouteData.Values["controller"]?.ToString() == "JoinRequests" && ViewContext.RouteData.Values["action"]?.ToString() == "ReceivedRequests" ? "nav__link--active" : "")">Solicitudes Recibidas</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="/JoinRequests/MyRequests" class="nav__link @(ViewContext.RouteData.Values["controller"]?.ToString() == "JoinRequests" && ViewContext.RouteData.Values["action"]?.ToString() == "MyRequests" ? "nav__link--active" : "")">Mis Solicitudes</a>
+                        </li>
+                        <li class="nav__item">
+                            <a href="/Notifications" class="nav__link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Notifications" ? "nav__link--active" : "")">Notificaciones</a>
+                        </li>
                     }
                 </ul>
                 <div class="nav__actions">

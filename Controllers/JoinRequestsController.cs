@@ -116,5 +116,119 @@ namespace TrabajoFinal.Controllers
             var joinRequests = await _context.JoinRequests.ToListAsync();
             return View(joinRequests);
         }
+
+        // GET: JoinRequests/MyRequests
+        public async Task<IActionResult> MyRequests()
+        {
+            var userId = _userManager.GetUserId(User);
+            var myRequests = await _context.JoinRequests
+                .Include(jr => jr.Project)
+                .Where(jr => jr.UserId == userId)
+                .OrderByDescending(jr => jr.DateSubmitted)
+                .ToListAsync();
+            return View(myRequests);
+        }
+
+        // GET: JoinRequests/ReceivedRequests
+        public async Task<IActionResult> ReceivedRequests()
+        {
+            var userId = _userManager.GetUserId(User);
+
+            // Get all projects created by this user
+            var userProjects = await _context.Projects
+                .Where(p => p.UserId == userId)
+                .Select(p => p.Id)
+                .ToListAsync();
+
+            // Get join requests for these projects
+            var receivedRequests = await _context.JoinRequests
+                .Include(jr => jr.User)
+                .Where(jr => userProjects.Contains(jr.ProjectId))
+                .OrderByDescending(jr => jr.DateSubmitted)
+                .ToListAsync();
+
+            return View(receivedRequests);
+        }
+
+        // POST: JoinRequests/Accept/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Accept(int id)
+        {
+            var joinRequest = await _context.JoinRequests
+                .Include(jr => jr.Project)
+                .FirstOrDefaultAsync(jr => jr.Id == id);
+
+            if (joinRequest == null)
+                return NotFound();
+
+            var currentUserId = _userManager.GetUserId(User);
+
+            // Verify that the current user is the project creator
+            if (joinRequest.Project.UserId != currentUserId)
+                return Forbid();
+
+            // Check if the project has reached its max member limit
+            var currentMembersCount = await _context.ProjectMembers
+                .CountAsync(pm => pm.ProjectId == joinRequest.ProjectId);
+
+            if (joinRequest.Project.MaxMembers <= currentMembersCount)
+            {
+                TempData["ErrorMessage"] = "No se puede aceptar la solicitud: el proyecto ha alcanzado su límite de miembros.";
+                return RedirectToAction("ReceivedRequests");
+            }
+
+            // Update the request status
+            joinRequest.Status = "Accepted";
+            _context.Update(joinRequest);
+
+            // Add the user to the project members if not already added
+            var existingMember = await _context.ProjectMembers
+                .AnyAsync(pm => pm.ProjectId == joinRequest.ProjectId && pm.UserId == joinRequest.UserId);
+
+            if (!existingMember)
+            {
+                var projectMember = new ProjectMember
+                {
+                    UserId = joinRequest.UserId,
+                    ProjectId = joinRequest.ProjectId,
+                    JoinedAt = DateTime.UtcNow
+                };
+                _context.ProjectMembers.Add(projectMember);
+            }
+
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Solicitud aceptada exitosamente.";
+            return RedirectToAction("ReceivedRequests");
+        }
+
+        // POST: JoinRequests/Reject/{id}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Reject(int id)
+        {
+            var joinRequest = await _context.JoinRequests
+                .Include(jr => jr.Project)
+                .FirstOrDefaultAsync(jr => jr.Id == id);
+
+            if (joinRequest == null)
+                return NotFound();
+
+            var currentUserId = _userManager.GetUserId(User);
+
+            // Verify that the current user is the project creator
+            if (joinRequest.Project.UserId != currentUserId)
+                return Forbid();
+
+            // Update the request status
+            joinRequest.Status = "Rejected";
+            _context.Update(joinRequest);
+
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Solicitud rechazada exitosamente.";
+            return RedirectToAction("ReceivedRequests");
+        }
     }
 }

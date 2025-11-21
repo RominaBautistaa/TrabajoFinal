@@ -58,6 +58,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSm9pblJlcXVlc3RzXExpc3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/romin/Downloads/TrabajoFinal/TrabajoFinal/TrabajoFinal/TrabajoFinal/Views/JoinRequests/MyRequests.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSm9pblJlcXVlc3RzXE15UmVxdWVzdHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/romin/Downloads/TrabajoFinal/TrabajoFinal/TrabajoFinal/TrabajoFinal/Views/JoinRequests/ReceivedRequests.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSm9pblJlcXVlc3RzXFJlY2VpdmVkUmVxdWVzdHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/romin/Downloads/TrabajoFinal/TrabajoFinal/TrabajoFinal/TrabajoFinal/Views/JoinRequests/Success.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSm9pblJlcXVlc3RzXFN1Y2Nlc3MuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -68,6 +76,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/romin/Downloads/TrabajoFinal/TrabajoFinal/TrabajoFinal/TrabajoFinal/Views/MyProjects/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTXlQcm9qZWN0c1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/romin/Downloads/TrabajoFinal/TrabajoFinal/TrabajoFinal/TrabajoFinal/Views/Notifications/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTm90aWZpY2F0aW9uc1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/romin/Downloads/TrabajoFinal/TrabajoFinal/TrabajoFinal/TrabajoFinal/Views/Projects/Detail.cshtml]

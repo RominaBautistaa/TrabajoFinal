@@ -68,6 +68,13 @@
                     <span asp-validation-for="Tags" class="text-danger form-validation-message"></span>
                     <small class="form-help">Separa las tecnologías con comas</small>
                 </div>
+
+                <div class="form-group">
+                    <label asp-for="MaxMembers" class="form-label">Límite de Miembros</label>
+                    <input asp-for="MaxMembers" type="number" class="form-input" min="1" max="50" placeholder="Cantidad máxima de miembros (por defecto 5)" />
+                    <span asp-validation-for="MaxMembers" class="text-danger form-validation-message"></span>
+                    <small class="form-help">Número máximo de miembros permitidos en el proyecto (mínimo 1, máximo 50)</small>
+                </div>
                 
                 <div class="form-actions">
                     <a asp-action="Index" class="btn btn--ghost">Cancelar</a>
