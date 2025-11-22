@@ -1,11 +1,16 @@
 @model TrabajoFinal.Models.Project
 
 @{
-    var currentUserId = User?.Identity?.Name;
+    string currentUserId = null;
+    if (User?.Identity?.IsAuthenticated == true)
+    {
+        currentUserId = User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+    }
     var memberCount = 0;
     var isMaxReached = false;
     var isUserMember = false;
     var userJoinRequestStatus = "";
+    var isProjectCreator = Model.UserId == currentUserId;
 
     // Calculate member count and check if max members reached
     var memberCounts = ViewBag.ProjectMemberCounts as Dictionary<int, int>;
@@ -87,7 +92,7 @@
             </div>
         </div>
 
-        @if (User?.Identity?.IsAuthenticated == true && Model.UserId != currentUserId)
+        @if (User?.Identity?.IsAuthenticated == true && !isProjectCreator)
         {
             <div class="card__actions" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--clr-border);">
                 @if (isUserMember)
@@ -158,7 +163,7 @@
                 }
             </div>
         }
-        else if (User?.Identity?.IsAuthenticated != true && Model.UserId != currentUserId)
+        else if (User?.Identity?.IsAuthenticated != true && !isProjectCreator)
         {
             <div class="card__actions" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--clr-border);">
                 <p style="text-align: center; color: var(--clr-muted); font-size: var(--font-size-sm); margin: 0;">

@@ -1,0 +1,21 @@
+﻿En mi aplicación ASP.NET Core MVC (CoWorkU) ya implementaste correctamente la lógica del botón en la vista de “Proyectos” (Index). La lógica funciona perfecto ahí.
+
+Sin embargo, en la sección “Proyectos Destacados” (Home/Index o la vista donde se renderizan los destacados), el botón NO se actualiza y siempre muestra “Unirse al Proyecto”.
+
+Necesito que la lógica del botón sea exactamente la misma en Proyectos Destacados que en la vista Proyectos:
+
+Si el usuario es creador → ocultar el botón
+
+Si el usuario ya es miembro → mostrar “Ya eres miembro”
+
+Si tiene solicitud pendiente → mostrar “Solicitud enviada”
+
+Si fue rechazado → permitir “Volver a solicitar” si hay cupos
+
+Si el proyecto está lleno → “Cupo lleno”
+
+Si no tiene solicitudes y hay cupos → “Unirse al Proyecto”
+
+Asegúrate de que TODA esta lógica se aplique también en la vista de Proyectos Destacados.
+
+Si la vista de tarjetas de proyectos se está repitiendo en varias páginas, convierte la tarjeta en una vista parcial reutilizable o replica la lógica en todas las vistas necesarias. No cambies los estilos ni el layout visual.
